@@ -2,7 +2,7 @@
 
 on:
   push:
-    branches: [ development, master ]
+    branches: [ development, master,feature/**]
   pull_request:
     branches: [ development ]
 
@@ -17,7 +17,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '6.x'
+        dotnet-version: '8.0.x'
 
     - name: Restore dependencies
       run: dotnet restore
