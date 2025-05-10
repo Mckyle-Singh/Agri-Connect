@@ -54,13 +54,24 @@ namespace Agri_Connect.Controllers
 
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Add)); // Redirect to list of products
+                return RedirectToAction(nameof(List)); // Redirect to list of products
             }
 
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> List()
+        {
+            var userId = _userManager.GetUserId(User);
+            var farmer = await _context.Farmers.FirstOrDefaultAsync(f => f.UserId == userId);
 
+            var products = await _context.Products
+                .Where(p => p.FarmerId == farmer.Id)
+                .ToListAsync();
+
+            return View(products);
+        }
 
     }
 }
