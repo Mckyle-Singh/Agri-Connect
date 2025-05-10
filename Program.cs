@@ -55,7 +55,6 @@ namespace Agri_Connect
 
             }
 
-
             app.Run();
         }
     }
