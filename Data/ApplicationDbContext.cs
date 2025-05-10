@@ -13,5 +13,6 @@ namespace Agri_Connect.Data
         }
 
         public DbSet<Farmer> Farmers { get; set; }
+        public DbSet<Product> Products { get; set; }
     }
 }
