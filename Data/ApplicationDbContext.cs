@@ -1,4 +1,4 @@
-﻿using Agri_Connect.Data.Entities;
+﻿using Agri_Connect.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Agri_Connect.Data.Entities
+namespace Agri_Connect.Models.Entities
 {
     public class Farmer
     {
@@ -10,7 +10,7 @@ namespace Agri_Connect.Data.Entities
         public string Location { get; set; }
 
         public string UserId { get; set; }  // Foreign key to IdentityUser
-                                            
+
         // Navigation property, if you want to access the IdentityUser object in your code
         public virtual IdentityUser User { get; set; }
     }
