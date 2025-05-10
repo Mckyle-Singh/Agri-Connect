@@ -6,7 +6,7 @@ namespace Agri_Connect
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +16,9 @@ namespace Agri_Connect
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                           .AddRoles<IdentityRole>()
+                           .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
@@ -45,6 +46,14 @@ namespace Agri_Connect
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
+
+            using (var scope = app.Services.CreateScope())
+            {
+
+                var services = scope.ServiceProvider;
+                await SeedData.InitializeAsync(services);
+
+            }
 
             app.Run();
         }
