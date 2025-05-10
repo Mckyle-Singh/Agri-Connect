@@ -4,6 +4,7 @@ using Agri_Connect.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Agri_Connect.Controllers
 {
@@ -68,5 +69,14 @@ namespace Agri_Connect.Controllers
 
             return View(model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> List()
+        {
+            var farmers = await _context.Farmers.ToListAsync();
+            return View(farmers);
+        }
+
+
     }
 }
