@@ -13,6 +13,8 @@ namespace Agri_Connect.Models.Entities
 
         // Navigation property, if you want to access the IdentityUser object in your code
         public virtual IdentityUser User { get; set; }
+        // Navigation property to Products
+        public virtual ICollection<Product> Products { get; set; }
     }
 
 }
