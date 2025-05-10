@@ -4,35 +4,73 @@
 @{
 }
 @model List<Agri_Connect.Models.Entities.Product>
-<h2>Products</h2>
+@using Agri_Connect.Enums
+@using System.ComponentModel.DataAnnotations
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Product Name</th>
-            <th>Type</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Description</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
+<!-- Jumbotron Section -->
+<div class="jumbotron jumbotron-fluid text-center bg-light p-4 mb-4">
+    <div class="container">
+        <h1 class="display-4">Your Products</h1>
+        <p class="lead">Review all the products youve added </p>
+    </div>
+</div>
+
+<!-- Filter & Search Form -->
+<div class="container mb-4">
+        <div class="row">
+            <!-- Search by name -->
+            <div class="col-md-4">
+                <input type="text" name="searchQuery" class="form-control" placeholder="Search by name"
+                       value="@Context.Request.Query["searchQuery"]">
+            </div>
+
+            <!-- Filter by Type -->
+            <div class="col-md-4">
+                <select name="type" class="form-control">
+                    <option value="">Filter by Product Type</option>
+                    @foreach (var type in Enum.GetValues(typeof(ProductType)))
+                    {
+                        <option value="@type">@type.ToString()</option>
+                    }
+                </select>
+            </div>
+         </div>
+
+        <div class="col-md-4 mt-2">
+            <button type="submit" class="btn btn-primary">Apply Filters</button>
+            <a href="/Venues/List" class="btn btn-secondary">Clear Filters</a>
+        </div>
+</div>
+
+<!-- Product Cards -->
+<div class="container">
+    <div class="row">
         @foreach (var product in Model)
         {
-            <tr>
-                <td>@product.ProductName</td>
-                <td>@product.Type</td>
-                <td>@product.Price</td>
-                <td>@product.Quantity</td>
-                <td>@product.Description</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-sm btn-danger">Delete</a>
-                </td>
-            </tr>
+            <div class="col-md-4 mb-4 d-flex align-items-stretch">
+                <div class="card" style="height: 100%; width: 100%;">
+                    <img class="card-img-top" src="@product.ProductImageUrl" alt="@product.ProductName" style="height: 200px; object-fit: cover;" />
+
+                    <div class="card-body">
+                        <h5 class="card-title">@product.ProductName</h5>
+                        <p class="card-text">
+                            <strong>Type:</strong> @product.Type<br />
+                            <strong>Price:</strong> R @product.Price<br />
+                            <strong>Quantity:</strong> @product.Quantity<br />
+                            <strong>Description:</strong> @product.Description
+                        </p>
+                    </div>
+
+                    <div class="card-footer">
+                        <a asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-primary">Edit</a>
+                        <form asp-controller="Products" asp-action="Delete" asp-route-id="@product.Id" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+</div>
 
 <a asp-action="Add" class="btn btn-primary">Add New Product</a>
