@@ -206,18 +206,25 @@ namespace Agri_Connect.Controllers
             var farmer = await _context.Farmers.FirstOrDefaultAsync(f => f.UserId == userId);
 
             if (farmer == null)
-                return Unauthorized();
+            {
+                TempData["ErrorMessage"] = "Unauthorized: You don't have permission to delete this product.";
+                return RedirectToAction("List", "Products");
+            }
 
             var product = await _context.Products
                 .FirstOrDefaultAsync(p => p.Id == id && p.FarmerId == farmer.Id);
 
             if (product == null)
-                return NotFound();
+            {
+                TempData["ErrorMessage"] = "Product not found or does not belong to you.";
+                return RedirectToAction("List", "Products");
+            }
 
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(List));
+            TempData["SuccessMessage"] = $"Product '{product.ProductName}' deleted successfully!";
+            return RedirectToAction("List", "Products");
         }
 
     }
