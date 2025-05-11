@@ -71,9 +71,21 @@ namespace Agri_Connect.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string searchQuery, string location)
         {
-            var farmers = await _context.Farmers.ToListAsync();
+            var query = _context.Farmers.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                query = query.Where(f => f.FullName.Contains(searchQuery));
+            }
+
+            if (!string.IsNullOrWhiteSpace(location))
+            {
+                query = query.Where(f => f.Location == location);
+            }
+
+            var farmers = await query.ToListAsync();
             return View(farmers);
         }
 
