@@ -34,6 +34,21 @@
                     }
                 </select>
             </div>
+            <!-- Filter by Farmer (only for employees) -->
+            @if (User.IsInRole("Employee"))
+            {
+                <div class="col-md-4">
+                <select name="farmerId" class="form-control">
+                    <option value="">Filter by Farmer</option>
+                    @foreach (var farmer in ViewBag.Farmers ?? new List<SelectListItem>())
+                    {
+                        <option value="@farmer.Value">
+                            @farmer.Text
+                        </option>
+                    }
+                </select>
+            </div>
+            }
         </div>
         <div class="col-md-4 mt-2">
             <button type="submit" class="btn btn-primary">Apply Filters</button>

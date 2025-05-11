@@ -5,6 +5,7 @@ using Agri_Connect.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Agri_Connect.Controllers
@@ -65,7 +66,7 @@ namespace Agri_Connect.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> List(string searchQuery,string type)
+        public async Task<IActionResult> List(string searchQuery,string type,string farmerId)
         {
             var userId = _userManager.GetUserId(User);
 
@@ -75,17 +76,35 @@ namespace Agri_Connect.Controllers
             {
                 productQuery = _context.Products.Include(p => p.Farmer);
 
+                // Filter by search query
                 if (!string.IsNullOrWhiteSpace(searchQuery))
                 {
                     productQuery = productQuery.Where(p => p.ProductName.Contains(searchQuery));
                 }
 
+                // Filter by Product Type
                 if (!string.IsNullOrWhiteSpace(type))
                 {
-                    // Filter by Product Type
+                   
                     var productType = (ProductType)Enum.Parse(typeof(ProductType), type);
                     productQuery = productQuery.Where(p => p.Type == productType);
                 }
+                // Filter by farmer (only for employees)
+                if (!string.IsNullOrWhiteSpace(farmerId))
+                {
+                    var farmerIdInt = int.Parse(farmerId);
+                    productQuery = productQuery.Where(p => p.FarmerId == farmerIdInt);
+                }
+                // Fetch all farmers for the dropdown list
+                ViewBag.Farmers = await _context.Farmers
+                    .Select(f => new SelectListItem
+                    {
+                        Value = f.Id.ToString(),
+                        Text = f.FullName // Assuming FullName is the property to display
+                    })
+                    .ToListAsync();
+
+                return View(await productQuery.ToListAsync());
             }
             else
             {
@@ -111,6 +130,7 @@ namespace Agri_Connect.Controllers
                     var productType = (ProductType)Enum.Parse(typeof(ProductType), type);
                     productQuery = productQuery.Where(p => p.Type == productType);
                 }
+
             }
 
             return View(await productQuery.ToListAsync());
