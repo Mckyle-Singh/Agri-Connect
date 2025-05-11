@@ -4,6 +4,7 @@ namespace Agri_Connect.Models.ViewModels
 {
     public class RegisterFarmerViewModel
     {
+        public int Id { get; set; } // Needed for editing existing farmers
         // Identity Fields
         [Required]
         [EmailAddress]

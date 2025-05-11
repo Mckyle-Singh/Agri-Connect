@@ -90,5 +90,58 @@ namespace Agri_Connect.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var farmer = await _context.Farmers.FirstOrDefaultAsync(f => f.Id == id);
+
+            if (farmer == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new EditFarmerViewModel
+            {
+                Id = farmer.Id,
+                Email = await _userManager.FindByIdAsync(farmer.UserId) is IdentityUser user ? user.Email : null,
+                FullName = farmer.FullName,
+                FarmName = farmer.FarmName,
+                Location = farmer.Location
+
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditFarmerViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var farmer = await _context.Farmers.FindAsync(model.Id);
+
+            if (farmer == null)
+            {
+                return NotFound();
+            }
+
+            Console.WriteLine($"Updating Farmer: {farmer.FullName} - {farmer.FarmName}");
+
+            // ✅ Only update farmer details (password is not required in this model)
+            farmer.FullName = model.FullName;
+            farmer.FarmName = model.FarmName;
+            farmer.Location = model.Location;
+
+            _context.Entry(farmer).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            Console.WriteLine("Farmer details updated successfully!");
+
+            return RedirectToAction("List", "Farmers");
+        }
     }
 }
