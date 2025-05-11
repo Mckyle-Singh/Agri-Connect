@@ -65,7 +65,7 @@ Before installing the project, ensure you have the following installed:
 4. **Apply Migrations**:
     - Run migration in package manager console: dotnet ef database update
 
-5.**Seed Data:**:
+5. **Seed Data:**:
     - The seeded data can be found in the Data folder
     - Once the project is run the data will be seeded with Employee login details 
 
