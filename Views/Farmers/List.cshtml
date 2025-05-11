@@ -1,22 +1,65 @@
 ﻿@model List<Agri_Connect.Models.Entities.Farmer>
-<h2>All Farmers</h2>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Full Name</th>
-            <th>Farm Name</th>
-            <th>Location</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var farmer in Model)
-        {
+<!-- Add Jumbotron Section -->
+<div class="jumbotron jumbotron-fluid text-center bg-light p-4 mb-4">
+    <div class="container">
+        <h1 class="display-4">All Farmers</h1>
+        <p class="lead">View all the farmers listed in your database</p>
+    </div>
+</div>
+
+<!-- Filter Section -->
+<div class="container mb-4">
+    <form method="get">
+        <div class="row">
+            <div class="col-md-3">
+                <input type="text" name="searchQuery" class="form-control" placeholder="Search by name"
+                       value="@Context.Request.Query["searchQuery"]">
+            </div>
+
+            <!-- Filter by location -->
+            <div class="col-md-4">
+                <select name="location" class="form-control">
+                    <option value="">Filter by location</option>
+                    <option value="Port Elizabeth">Port Elizabeth</option>
+                    <option value="Cape Town">Cape Town</option>
+                    <option value="Durban">Durban</option>
+                    <option value="Johannesburg">Johannesburg</option>
+                </select>
+            </div>
+            <div class="col-md-12 mt-3">
+                <button type="submit" class="btn btn-primary">Apply Filters</button>
+                <a href="/Farmers/List" class="btn btn-secondary">Clear Filters</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="table-responsive shadow rounded">
+    <table class="table table-hover table-bordered align-middle text-center">
+        <thead class="table-dark">
             <tr>
-                <td>@farmer.FullName</td>
-                <td>@farmer.FarmName</td>
-                <td>@farmer.Location</td>
+                <th scope="col">Full Name</th>
+                <th scope="col">Farm Name</th>
+                <th scope="col">Location</th>
+                <th scope="col">Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var farmer in Model)
+            {
+                <tr>
+                    <td>@farmer.FullName</td>
+                    <td>@farmer.FarmName</td>
+                    <td>@farmer.Location</td>
+                    <td>
+                        <a asp-controller="Farmers" asp-action="Edit"  class="btn btn-sm btn-warning me-1">Edit</a>
+                        <form asp-controller="Farmers" asp-action="Delete"  method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
