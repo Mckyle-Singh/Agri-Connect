@@ -153,5 +153,28 @@ namespace Agri_Connect.Controllers
             return RedirectToAction("List", "Products");
         }
 
+        [Authorize(Roles = "Farmer")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var userId = _userManager.GetUserId(User);
+            var farmer = await _context.Farmers.FirstOrDefaultAsync(f => f.UserId == userId);
+
+            if (farmer == null)
+                return Unauthorized();
+
+            var product = await _context.Products
+                .FirstOrDefaultAsync(p => p.Id == id && p.FarmerId == farmer.Id);
+
+            if (product == null)
+                return NotFound();
+
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(List));
+        }
+
     }
 }
