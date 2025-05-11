@@ -122,5 +122,36 @@ namespace Agri_Connect.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Farmer")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, AddProductViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var userId = _userManager.GetUserId(User);
+            var farmer = await _context.Farmers.FirstOrDefaultAsync(f => f.UserId == userId);
+
+            if (farmer == null)
+                return Unauthorized();
+
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id && p.FarmerId == farmer.Id);
+
+            if (product == null)
+                return NotFound();
+
+            product.ProductName = model.ProductName;
+            product.Type = model.Type;
+            product.ProductImageUrl = model.ProductImageUrl;
+            product.Price = model.Price;
+            product.Quantity = model.Quantity;
+            product.Description = model.Description;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("List", "Products");
+        }
+
     }
 }
