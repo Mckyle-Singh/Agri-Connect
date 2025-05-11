@@ -143,5 +143,32 @@ namespace Agri_Connect.Controllers
 
             return RedirectToAction("List", "Farmers");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var farmer = await _context.Farmers
+                .Include(f => f.Products)
+                .FirstOrDefaultAsync(f => f.Id == id);
+
+            if (farmer == null)
+            {
+                TempData["ErrorMessage"] = "Farmer not found.";
+                return RedirectToAction("List", "Farmers");
+            }
+
+            if (farmer.Products.Any())
+            {
+                TempData["ErrorMessage"] = "Cannot delete farmer who has existing products.";
+                return RedirectToAction("List", "Farmers");
+            }
+
+            _context.Farmers.Remove(farmer);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Farmer '{farmer.FullName}' deleted successfully!";
+            return RedirectToAction("List", "Farmers");
+        }
     }
 }
