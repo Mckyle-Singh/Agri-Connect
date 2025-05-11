@@ -17,13 +17,13 @@
 
 <!-- Filter & Search Form -->
 <div class="container mb-4">
+    <form method="get">
         <div class="row">
             <!-- Search by name -->
             <div class="col-md-4">
                 <input type="text" name="searchQuery" class="form-control" placeholder="Search by name"
                        value="@Context.Request.Query["searchQuery"]">
             </div>
-
             <!-- Filter by Type -->
             <div class="col-md-4">
                 <select name="type" class="form-control">
@@ -34,12 +34,12 @@
                     }
                 </select>
             </div>
-         </div>
-
+        </div>
         <div class="col-md-4 mt-2">
             <button type="submit" class="btn btn-primary">Apply Filters</button>
-            <a href="/Venues/List" class="btn btn-secondary">Clear Filters</a>
+            <a href="/Products/List" class="btn btn-secondary">Clear Filters</a>
         </div>
+    </form>    
 </div>
 
 <!-- Product Cards -->
@@ -72,5 +72,3 @@
         }
     </div>
 </div>
-
-<a asp-action="Add" class="btn btn-primary">Add New Product</a>

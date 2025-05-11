@@ -64,20 +64,23 @@ namespace Agri_Connect.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string searchQuery)
         {
             var userId = _userManager.GetUserId(User);
 
             if (User.IsInRole("Employee"))
             {
-                // Employee sees all products
-                var allProducts = await _context.Products
+                var allProducts = _context.Products
                     .Include(p => p.Farmer)
-                    .ToListAsync();
+                    .AsQueryable();
 
-                return View(allProducts);
+                if (!string.IsNullOrWhiteSpace(searchQuery))
+                {
+                    allProducts = allProducts.Where(p => p.ProductName.Contains(searchQuery));
+                }
+
+                return View(await allProducts.ToListAsync()); // 👈 Returns List<Product>
             }
-
             // Else assume the user is a Farmer
             var farmer = await _context.Farmers.FirstOrDefaultAsync(f => f.UserId == userId);
 
@@ -86,13 +89,20 @@ namespace Agri_Connect.Controllers
                 return Unauthorized(); // or handle it appropriately
             }
 
-            var farmerProducts = await _context.Products
+            var farmerProducts =  _context.Products
                 .Where(p => p.FarmerId == farmer.Id)
                 .Include(p => p.Farmer)
-                .ToListAsync();
+                .AsQueryable();
 
-            return View(farmerProducts);
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                farmerProducts = farmerProducts.Where(p => p.ProductName.Contains(searchQuery));
+            }
+
+            return View(await farmerProducts.ToListAsync());
         }
+
+
 
         [Authorize(Roles = "Farmer")]
         [HttpGet]
