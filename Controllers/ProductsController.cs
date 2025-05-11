@@ -94,5 +94,33 @@ namespace Agri_Connect.Controllers
             return View(farmerProducts);
         }
 
+        [Authorize(Roles = "Farmer")]
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var userId = _userManager.GetUserId(User);
+            var farmer = await _context.Farmers.FirstOrDefaultAsync(f => f.UserId == userId);
+
+            if (farmer == null)
+                return Unauthorized();
+
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id && p.FarmerId == farmer.Id);
+
+            if (product == null)
+                return NotFound();
+
+            var model = new AddProductViewModel
+            {
+                ProductName = product.ProductName,
+                Type = product.Type,
+                ProductImageUrl = product.ProductImageUrl,
+                Price = product.Price,
+                Quantity = product.Quantity,
+                Description = product.Description
+            };
+
+            return View(model);
+        }
+
     }
 }
