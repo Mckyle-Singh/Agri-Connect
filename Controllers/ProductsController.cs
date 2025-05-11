@@ -1,4 +1,5 @@
 ﻿using Agri_Connect.Data;
+using Agri_Connect.Enums;
 using Agri_Connect.Models.Entities;
 using Agri_Connect.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -64,42 +65,55 @@ namespace Agri_Connect.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> List(string searchQuery)
+        public async Task<IActionResult> List(string searchQuery,string type)
         {
             var userId = _userManager.GetUserId(User);
 
+            IQueryable<Product> productQuery;
+
             if (User.IsInRole("Employee"))
             {
-                var allProducts = _context.Products
-                    .Include(p => p.Farmer)
-                    .AsQueryable();
+                productQuery = _context.Products.Include(p => p.Farmer);
 
                 if (!string.IsNullOrWhiteSpace(searchQuery))
                 {
-                    allProducts = allProducts.Where(p => p.ProductName.Contains(searchQuery));
+                    productQuery = productQuery.Where(p => p.ProductName.Contains(searchQuery));
                 }
 
-                return View(await allProducts.ToListAsync()); // 👈 Returns List<Product>
+                if (!string.IsNullOrWhiteSpace(type))
+                {
+                    // Filter by Product Type
+                    var productType = (ProductType)Enum.Parse(typeof(ProductType), type);
+                    productQuery = productQuery.Where(p => p.Type == productType);
+                }
             }
-            // Else assume the user is a Farmer
-            var farmer = await _context.Farmers.FirstOrDefaultAsync(f => f.UserId == userId);
-
-            if (farmer == null)
+            else
             {
-                return Unauthorized(); // or handle it appropriately
+                var farmer = await _context.Farmers.FirstOrDefaultAsync(f => f.UserId == userId);
+
+                if (farmer == null)
+                {
+                    return Unauthorized(); // or handle it appropriately
+                }
+
+                productQuery = _context.Products
+                    .Where(p => p.FarmerId == farmer.Id)
+                    .Include(p => p.Farmer);
+
+                if (!string.IsNullOrWhiteSpace(searchQuery))
+                {
+                    productQuery = productQuery.Where(p => p.ProductName.Contains(searchQuery));
+                }
+
+                if (!string.IsNullOrWhiteSpace(type))
+                {
+                    // Filter by Product Type
+                    var productType = (ProductType)Enum.Parse(typeof(ProductType), type);
+                    productQuery = productQuery.Where(p => p.Type == productType);
+                }
             }
 
-            var farmerProducts =  _context.Products
-                .Where(p => p.FarmerId == farmer.Id)
-                .Include(p => p.Farmer)
-                .AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(searchQuery))
-            {
-                farmerProducts = farmerProducts.Where(p => p.ProductName.Contains(searchQuery));
-            }
-
-            return View(await farmerProducts.ToListAsync());
+            return View(await productQuery.ToListAsync());
         }
 
 
