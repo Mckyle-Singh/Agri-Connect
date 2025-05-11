@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Agri_Connect.Controllers
 {
-    [Authorize(Roles = "Farmer")]
+    
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,6 +20,7 @@ namespace Agri_Connect.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Farmer")]
         [HttpGet]
         public IActionResult Add()
         {
@@ -27,6 +28,7 @@ namespace Agri_Connect.Controllers
         }
 
         // POST: Products/Add
+        [Authorize(Roles = "Farmer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(AddProductViewModel model)
@@ -60,17 +62,36 @@ namespace Agri_Connect.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> List()
         {
             var userId = _userManager.GetUserId(User);
+
+            if (User.IsInRole("Employee"))
+            {
+                // Employee sees all products
+                var allProducts = await _context.Products
+                    .Include(p => p.Farmer)
+                    .ToListAsync();
+
+                return View(allProducts);
+            }
+
+            // Else assume the user is a Farmer
             var farmer = await _context.Farmers.FirstOrDefaultAsync(f => f.UserId == userId);
 
-            var products = await _context.Products
+            if (farmer == null)
+            {
+                return Unauthorized(); // or handle it appropriately
+            }
+
+            var farmerProducts = await _context.Products
                 .Where(p => p.FarmerId == farmer.Id)
+                .Include(p => p.Farmer)
                 .ToListAsync();
 
-            return View(products);
+            return View(farmerProducts);
         }
 
     }
