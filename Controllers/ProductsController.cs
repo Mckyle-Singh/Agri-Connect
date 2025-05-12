@@ -84,7 +84,6 @@ namespace Agri_Connect.Controllers
                 // Filter by Product Type
                 if (!string.IsNullOrWhiteSpace(type))
                 {
-                   
                     var productType = (ProductType)Enum.Parse(typeof(ProductType), type);
                     productQuery = productQuery.Where(p => p.Type == productType);
                 }
