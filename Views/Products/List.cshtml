@@ -5,7 +5,7 @@
 }
 @model List<Agri_Connect.Models.Entities.Product>
 @using Agri_Connect.Enums
-@using System.ComponentModel.DataAnnotations
+
 
 @if (TempData["ErrorMessage"] != null)
 {
@@ -52,11 +52,12 @@
             </div>
             <!-- Filter by Type -->
             <div class="col-md-4">
-                <select name="type" class="form-control">
+                <select name="Type" class="form-control">
                     <option value="">Filter by Product Type</option>
                     @foreach (var type in Enum.GetValues(typeof(ProductType)))
                     {
-                        <option value="@type">@type.ToString()</option>
+                       
+                        <option value="@type">@type</option>
                     }
                 </select>
             </div>
