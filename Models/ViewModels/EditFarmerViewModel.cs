@@ -21,8 +21,6 @@ namespace Agri_Connect.Models.ViewModels
 
             [Required]
             public string Location { get; set; }
-
-            // ✅ No password here, making it optional during edits
-        
+   
     }
 }

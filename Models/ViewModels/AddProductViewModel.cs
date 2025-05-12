@@ -17,7 +17,7 @@ namespace Agri_Connect.Models.ViewModels
 
         [Required]
         [Display(Name = "Image URL")]
-        public string? ProductImageUrl { get; set; } // Stored image URL in DB
+        public string? ProductImageUrl { get; set; } 
 
         [Required]
         public decimal Price { get; set; }
@@ -28,6 +28,6 @@ namespace Agri_Connect.Models.ViewModels
         [Required]
         public string Description { get; set; }
 
-        public int FarmerId { get; set; }  // This can b
+        public int FarmerId { get; set; } 
     }
 }
