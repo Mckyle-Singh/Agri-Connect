@@ -27,7 +27,6 @@ namespace Agri_Connect.Controllers
             return View();
         }
 
-        // POST: Farmer/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterFarmerViewModel model)
@@ -58,7 +57,7 @@ namespace Agri_Connect.Controllers
                     _context.Farmers.Add(farmer);
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Index", "Home"); // Or another admin page
+                    return RedirectToAction("Index", "Home"); 
                 }
 
                 foreach (var error in result.Errors)
@@ -90,5 +89,80 @@ namespace Agri_Connect.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var farmer = await _context.Farmers.FirstOrDefaultAsync(f => f.Id == id);
+
+            if (farmer == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new EditFarmerViewModel
+            {
+                Id = farmer.Id,
+                Email = await _userManager.FindByIdAsync(farmer.UserId) is IdentityUser user ? user.Email : null,
+                FullName = farmer.FullName,
+                FarmName = farmer.FarmName,
+                Location = farmer.Location
+
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditFarmerViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var farmer = await _context.Farmers.FindAsync(model.Id);
+
+            if (farmer == null)
+            {
+                return NotFound();
+            }
+
+            farmer.FullName = model.FullName;
+            farmer.FarmName = model.FarmName;
+            farmer.Location = model.Location;
+
+            _context.Entry(farmer).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("List", "Farmers");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var farmer = await _context.Farmers
+                .Include(f => f.Products)
+                .FirstOrDefaultAsync(f => f.Id == id);
+
+            if (farmer == null)
+            {
+                TempData["ErrorMessage"] = "Farmer not found.";
+                return RedirectToAction("List", "Farmers");
+            }
+
+            if (farmer.Products.Any())
+            {
+                TempData["ErrorMessage"] = "Cannot delete farmer who has existing products.";
+                return RedirectToAction("List", "Farmers");
+            }
+
+            _context.Farmers.Remove(farmer);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Farmer '{farmer.FullName}' deleted successfully!";
+            return RedirectToAction("List", "Farmers");
+        }
     }
 }

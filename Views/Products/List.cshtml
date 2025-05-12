@@ -5,13 +5,39 @@
 }
 @model List<Agri_Connect.Models.Entities.Product>
 @using Agri_Connect.Enums
-@using System.ComponentModel.DataAnnotations
+
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 
 <!-- Jumbotron Section -->
 <div class="jumbotron jumbotron-fluid text-center bg-light p-4 mb-4">
     <div class="container">
-        <h1 class="display-4">Your Products</h1>
-        <p class="lead">Review all the products youve added </p>
+        <h1 class="display-4">
+            @if (User.IsInRole("Employee"))
+            {
+                // If the user is an admin
+                @:All Products
+            }
+            else if (User.IsInRole("Farmer"))
+            {
+                // If the user is a farmer
+                @:My Products
+            }
+        </h1>
+        <p class="lead">Review all the products added</p>
     </div>
 </div>
 
@@ -26,11 +52,12 @@
             </div>
             <!-- Filter by Type -->
             <div class="col-md-4">
-                <select name="type" class="form-control">
+                <select name="Type" class="form-control">
                     <option value="">Filter by Product Type</option>
                     @foreach (var type in Enum.GetValues(typeof(ProductType)))
                     {
-                        <option value="@type">@type.ToString()</option>
+                       
+                        <option value="@type">@type</option>
                     }
                 </select>
             </div>
@@ -64,7 +91,10 @@
         {
             <div class="col-md-4 mb-4 d-flex align-items-stretch">
                 <div class="card" style="height: 100%; width: 100%;">
-                    <img class="card-img-top" src="@product.ProductImageUrl" alt="@product.ProductName" style="height: 200px; object-fit: cover;" />
+                    <img class="card-img-top" 
+                    src="@product.ProductImageUrl" 
+                    alt="@product.ProductName" 
+                    style="height:300px ;width:100%; object-fit: cover;" />
 
                     <div class="card-body">
                         <h5 class="card-title">@product.ProductName</h5>
@@ -77,7 +107,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <a asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-primary">Edit</a>
+                        <a asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning">Edit</a>
                         <form asp-controller="Products" asp-action="Delete" asp-route-id="@product.Id" method="post" style="display:inline;">
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>

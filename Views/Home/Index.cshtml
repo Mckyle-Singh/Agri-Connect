@@ -2,7 +2,141 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+5hb5g8lKc5fOX9Y5EzeqqpREsZZH2ojZrG57Qm"
+          crossorigin="anonymous">
+</head>
+
+<div class="container-fluid p-0">
+    <div id="customCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+        <!-- Carousel Indicators -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#customCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#customCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#customCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+
+        <!-- Carousel Content -->
+        <div class="carousel-inner">
+            <div class="carousel-item active" style="background-image: url('https://picsum.photos/id/1011/1920/800'); background-size: cover; background-position: center;">
+                <div class="carousel-caption">
+                    <h2><a href="#">Discover fresh, locally grown produce direct from our farmers.</a></h2>
+                    <p>Connecting communities with sustainable agriculture.</p>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('https://picsum.photos/id/1016/1920/800'); background-size: cover; background-position: center;">
+                <div class="carousel-caption">
+                    <h2><a href="#">Support local farmers and enjoy healthier food choices.</a></h2>
+                    <p>From farm to table, every product tells a story.</p>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('https://picsum.photos/id/1033/1920/800'); background-size: cover; background-position: center;">
+                <div class="carousel-caption">
+                    <h2><a href="#">Explore a marketplace full of natural goodness.</a></h2>
+                    <p>Fresh fruits, vegetables, dairy, and more — all in one place.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#customCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#customCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+<!-- Did You Know Section -->
+<div class="container section did-you-know">
+    <h3 class="text-center">Did You Know?</h3>
+    <div class="row text-center">
+        <div class="col-md-4">
+            <div class="fact-box">
+                <i class="bi bi-lightbulb-fill fact-icon"></i>
+                <h5 class="mt-3">Most Consumed Crop</h5>
+                <p>Rice is a staple for more than half of the world’s population.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="fact-box">
+                <i class="bi bi-people-fill fact-icon"></i>
+                <h5 class="mt-3">Global Farmers</h5>
+                <p>Over 570 million farms exist globally — most are family-run.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="fact-box">
+                <i class="bi bi-geo-alt-fill fact-icon"></i>
+                <h5 class="mt-3">Organic Boom</h5>
+                <p>The global organic food market is expected to reach $437B by 2026.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Products Section -->
+<div class="container section">
+    <h3 class="text-center">Explore Fresh Products</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://picsum.photos/id/292/400/300" class="card-img-top" alt="Tomatoes">
+                <div class="card-body">
+                    <h5 class="card-title">Organic Tomatoes</h5>
+                    <p class="card-text">Juicy, red, and pesticide-free — direct from local farms.</p>
+                    <a href="#" class="btn btn-success">View More</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://picsum.photos/id/433/400/300" class="card-img-top" alt="Farm Eggs">
+                <div class="card-body">
+                    <h5 class="card-title">Free-Range Eggs</h5>
+                    <p class="card-text">Naturally laid by well-cared-for hens.</p>
+                    <a href="#" class="btn btn-success">View More</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://picsum.photos/id/1080/400/300" class="card-img-top" alt="Green Veggies">
+                <div class="card-body">
+                    <h5 class="card-title">Seasonal Greens</h5>
+                    <p class="card-text">Spinach, kale, and more — fresh and nutrient-rich.</p>
+                    <a href="#" class="btn btn-success">View More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Farmers or Farms -->
+<div class="container section">
+    <h3 class="text-center">Meet Our Featured Farmers</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <img src="https://picsum.photos/id/237/600/400" class="card-img-top" alt="Farmer 1">
+                <div class="card-body">
+                    <h5 class="card-title">Sipho M.</h5>
+                    <p class="card-text">Specializing in sustainable crop rotation and water-efficient farming in Eastern Cape.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <img src="https://picsum.photos/id/1027/600/400" class="card-img-top" alt="Farmer 2">
+                <div class="card-body">
+                    <h5 class="card-title">Ayesha K.</h5>
+                    <p class="card-text">A dedicated livestock and dairy farmer from KwaZulu-Natal, producing award-winning dairy products.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -15,6 +15,7 @@ namespace Agri_Connect.Models.ViewModels
         [Display(Name = "Product Type")]
         public ProductType Type { get; set; }
 
+        [Required]
         [Display(Name = "Image URL")]
         public string? ProductImageUrl { get; set; } // Stored image URL in DB
 
