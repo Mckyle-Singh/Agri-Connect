@@ -158,8 +158,20 @@ namespace Agri_Connect.Controllers
                 return RedirectToAction("List", "Farmers");
             }
 
+
             _context.Farmers.Remove(farmer);
             await _context.SaveChangesAsync();
+
+            var user = await _userManager.FindByIdAsync(farmer.UserId);
+            if (user != null)
+            {
+                var userResult = await _userManager.DeleteAsync(user);
+                if (!userResult.Succeeded)
+                {
+                    TempData["ErrorMessage"] = "Farmer deleted, but failed to delete associated user.";
+                    return RedirectToAction("List", "Farmers");
+                }
+            }
 
             TempData["SuccessMessage"] = $"Farmer '{farmer.FullName}' deleted successfully!";
             return RedirectToAction("List", "Farmers");
