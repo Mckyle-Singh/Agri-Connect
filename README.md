@@ -5,10 +5,6 @@
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Installation](#installation)
-- [Running the Application](#running-the-application)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
 ---
 
@@ -67,6 +63,19 @@ Before installing the project, ensure you have the following installed:
 
 5. **Seed Data:**:
     - The seeded data can be found in the Data folder
+    - To build the application run "dotnet build" in the terminal or click "Build solution" in the build tab
     - Once the project is run the data will be seeded with Employee login details 
+    
+6. **Run application:**:
+    - Click on the green play button to run the application
+
+
+### Login Details for Employee(Admin)
+
+These are the login details for the Employee user once your project is up and running:
+    
+    - Username/Email : "admin@gmail.com"
+    - Password:Test1234!
+
 
   

@@ -29,7 +29,6 @@ namespace Agri_Connect.Controllers
             return View();
         }
 
-        // POST: Products/Add
         [Authorize(Roles = "Farmer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -42,7 +41,7 @@ namespace Agri_Connect.Controllers
 
                 if (farmer == null)
                 {
-                    return Unauthorized(); // Or redirect to an error page
+                    return Unauthorized(); 
                 }
 
                 var product = new Product
@@ -58,7 +57,7 @@ namespace Agri_Connect.Controllers
 
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(List)); // Redirect to list of products
+                return RedirectToAction(nameof(List)); 
             }
 
             return View(model);
@@ -85,7 +84,6 @@ namespace Agri_Connect.Controllers
                 // Filter by Product Type
                 if (!string.IsNullOrWhiteSpace(type))
                 {
-                   
                     var productType = (ProductType)Enum.Parse(typeof(ProductType), type);
                     productQuery = productQuery.Where(p => p.Type == productType);
                 }
@@ -100,7 +98,7 @@ namespace Agri_Connect.Controllers
                     .Select(f => new SelectListItem
                     {
                         Value = f.Id.ToString(),
-                        Text = f.FullName // Assuming FullName is the property to display
+                        Text = f.FullName 
                     })
                     .ToListAsync();
 
@@ -112,7 +110,7 @@ namespace Agri_Connect.Controllers
 
                 if (farmer == null)
                 {
-                    return Unauthorized(); // or handle it appropriately
+                    return Unauthorized(); 
                 }
 
                 productQuery = _context.Products

@@ -4,8 +4,7 @@ namespace Agri_Connect.Models.ViewModels
 {
     public class RegisterFarmerViewModel
     {
-        public int Id { get; set; } // Needed for editing existing farmers
-        // Identity Fields
+        public int Id { get; set; } 
         [Required]
         [EmailAddress]
         public string Email { get; set; }
@@ -15,7 +14,6 @@ namespace Agri_Connect.Models.ViewModels
         [MinLength(6, ErrorMessage = "Password must be at least 6 characters.")]
         public string Password { get; set; }
 
-        // Farmer Profile Fields
         [Required]
         [Display(Name = "Full Name")]
         public string FullName { get; set; }
