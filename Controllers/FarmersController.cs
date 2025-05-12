@@ -27,7 +27,6 @@ namespace Agri_Connect.Controllers
             return View();
         }
 
-        // POST: Farmer/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterFarmerViewModel model)
@@ -58,7 +57,7 @@ namespace Agri_Connect.Controllers
                     _context.Farmers.Add(farmer);
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Index", "Home"); // Or another admin page
+                    return RedirectToAction("Index", "Home"); 
                 }
 
                 foreach (var error in result.Errors)
@@ -129,17 +128,12 @@ namespace Agri_Connect.Controllers
                 return NotFound();
             }
 
-            Console.WriteLine($"Updating Farmer: {farmer.FullName} - {farmer.FarmName}");
-
-            // ✅ Only update farmer details (password is not required in this model)
             farmer.FullName = model.FullName;
             farmer.FarmName = model.FarmName;
             farmer.Location = model.Location;
 
             _context.Entry(farmer).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-
-            Console.WriteLine("Farmer details updated successfully!");
 
             return RedirectToAction("List", "Farmers");
         }

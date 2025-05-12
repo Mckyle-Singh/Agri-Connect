@@ -9,10 +9,12 @@ namespace Agri_Connect.Models.Entities
         public string FarmName { get; set; }
         public string Location { get; set; }
 
-        public string UserId { get; set; }  // Foreign key to IdentityUser
+        // Foreign key to IdentityUser
+        public string UserId { get; set; }  
 
-        // Navigation property, if you want to access the IdentityUser object in your code
+        // Navigation property for IdentityUser
         public virtual IdentityUser User { get; set; }
+
         // Navigation property to Products
         public virtual ICollection<Product> Products { get; set; }
     }

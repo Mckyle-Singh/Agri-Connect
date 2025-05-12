@@ -25,8 +25,19 @@
 <!-- Jumbotron Section -->
 <div class="jumbotron jumbotron-fluid text-center bg-light p-4 mb-4">
     <div class="container">
-        <h1 class="display-4">Your Products</h1>
-        <p class="lead">Review all the products youve added </p>
+        <h1 class="display-4">
+            @if (User.IsInRole("Employee"))
+            {
+                // If the user is an admin
+                @:All Products
+            }
+            else if (User.IsInRole("Farmer"))
+            {
+                // If the user is a farmer
+                @:My Products
+            }
+        </h1>
+        <p class="lead">Review all the products added</p>
     </div>
 </div>
 
@@ -82,7 +93,7 @@
                     <img class="card-img-top" 
                     src="@product.ProductImageUrl" 
                     alt="@product.ProductName" 
-                    style="max-height:300px ;width:100%; object-fit: cover;" />
+                    style="height:300px ;width:100%; object-fit: cover;" />
 
                     <div class="card-body">
                         <h5 class="card-title">@product.ProductName</h5>
@@ -95,7 +106,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <a asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-primary">Edit</a>
+                        <a asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning">Edit</a>
                         <form asp-controller="Products" asp-action="Delete" asp-route-id="@product.Id" method="post" style="display:inline;">
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>

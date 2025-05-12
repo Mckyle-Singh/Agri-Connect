@@ -14,7 +14,7 @@
 
 ## Features
 
-- **User Authentication**: Allows users to register, log in, and manage their profiles.
+- **User Authentication**: Allows users log in, and manage their profiles.
 - **Farmer Registration & Management**: Employees can register farmers, edit their profiles, and list them.
 - **Product Management**: Farmers can add, edit, and view products they offer for sale.
 - **Role-Based Access**: Admin roles (like "Employee") have the ability to manage farmers and products.
